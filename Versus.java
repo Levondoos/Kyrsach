@@ -1,8 +1,11 @@
+package main;
+
 import java.io.IOException;
 import java.util.Random;
+import java.util.concurrent.ExecutionException;
 
 public class Versus {
-    static void start(int[] arr, String name, long maxCount) throws IOException {
+    static void start(int[] arr, String name, long maxCount) throws IOException, InterruptedException, ExecutionException{
         Random r = new Random();
 
         int rep = 10; //Число повторений
@@ -57,7 +60,7 @@ public class Versus {
         }
         table.save(name, handle);
     }
-    public static long sort(int[] a, String[] hand, int n, int s, boolean flag) {
+    public static long sort(int[] a, String[] hand, int n, int s, boolean flag) throws InterruptedException, ExecutionException {
         long startTime, endTime;
         switch(n) {
             case 1:
@@ -108,11 +111,17 @@ public class Versus {
                 endTime = System.nanoTime();
                 if (flag)  hand[s+1] = "MergeSort";
                 return endTime - startTime;
-            case 99:
+            case 9:
                 startTime = System.nanoTime();
-                new ExSerSort().sort(a);
+                int[] d = new SampleParSort().sort(a,  20);
                 endTime = System.nanoTime();
-                if (flag)  hand[s+1] = "Executor Server";
+                if (flag)  hand[s+1] = "ParallelSampleSort";
+                return endTime - startTime;
+            case 10:
+                startTime = System.nanoTime();
+                int[] e = new SampleSort().sort(a,  20);
+                endTime = System.nanoTime();
+                if (flag)  hand[s+1] = "SampleSort";
                 return endTime - startTime;
             default:
                 System.out.println("Не найдена сортировка");
